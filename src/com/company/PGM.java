@@ -152,6 +152,21 @@ public class PGM{
 
     }
 
+    /*
+    Aplica a transformação gama cuja fórmula é s = c*r^(gama)
+    Onde s é o valor resultante, r é o valor do pixel de entrada, gama e c são constantes
+     */
+    public void transformacaoGama(double gama, double c){
+
+        for (int i = 0; i < pixels.length; i++) {
+            for (int j = 0; j < pixels[i].length; j++) {
+                double novoValor = c * Math.pow((float) pixels[i][j] / maxValue, gama);
+                pixels[i][j] = (int) (novoValor * maxValue);
+            }
+        }
+
+    }
+
     public void girar90AntiHorario(){
         int newWidth = height;
         int newHeight = width;
