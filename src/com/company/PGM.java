@@ -167,6 +167,25 @@ public class PGM{
 
     }
 
+    /*
+    Gira a imagem em torno do eixo y
+     */
+    public void flipHorizontal(){
+
+        for (int i = 0; i < pixels.length; i++) {
+            //copiando a linha para um vetor auxiliar
+            int[] aux = new int[pixels[i].length];
+            for (int k = 0; k < aux.length; k++) {
+                aux[k] = pixels[i][k];
+            }
+
+            for (int j = 0; j < pixels[i].length; j++) {
+                pixels[i][j] = aux[pixels[i].length - 1 - j];
+            }
+        }
+
+    }
+
     public void girar90AntiHorario(){
         int newWidth = height;
         int newHeight = width;

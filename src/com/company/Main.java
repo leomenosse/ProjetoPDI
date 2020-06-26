@@ -29,7 +29,7 @@ public class Main {
         PGM pgmOriginal = new PGM(nomeArq);
         PGM pgm = new PGM(pgmOriginal);
 
-        pgm.transformacaoGama(0.3, 1);
+        pgm.flipHorizontal();
         pgm.save("gama_spine2.pgm");
 
     }
