@@ -106,6 +106,52 @@ public class PGM{
         }
     }
 
+    /*
+    Aplica o fatiamento de níveis de intensidade, alterando somente os pixels cuja intensidade está no intervalo [a, b]
+     */
+    public void fatiamento(int a, int b, int novoValor){
+
+        //verificação que determina se o novo valor está dentro do intervalo permitido
+        if(novoValor > this.maxValue) novoValor = maxValue;
+        else if(novoValor < 0) novoValor = 0;
+
+        for(int i = 0; i < pixels.length; i++){ //height
+            for(int j = 0; j < pixels[i].length; j++){ //width
+                if(pixels[i][j] >= a && pixels[i][j] <= b){
+                    pixels[i][j] = novoValor;
+                }
+            }
+        }
+
+    }
+
+    /*
+    Aplica o fatiamento de níveis de intensidade, alterando todos os pixels.
+    Aqueles que estão dentro do intervalo [a,b] recebem valorDentroDoIntervalo
+    Os que estão fora do intervalo recebem valorForaDoIntervalo
+     */
+    public void fatiamento(int a, int b, int valorDentroDoIntervalo, int valorForaDoIntervalo){
+
+        //verificação que determina se o novo valor está dentro do intervalo permitido
+        if(valorDentroDoIntervalo > this.maxValue) valorDentroDoIntervalo = maxValue;
+        else if(valorDentroDoIntervalo < 0) valorDentroDoIntervalo = 0;
+
+        if(valorForaDoIntervalo > this.maxValue) valorForaDoIntervalo= maxValue;
+        else if(valorForaDoIntervalo < 0) valorForaDoIntervalo = 0;
+
+        for(int i = 0; i < pixels.length; i++){ //height
+            for(int j = 0; j < pixels[i].length; j++){ //width
+                if(pixels[i][j] >= a && pixels[i][j] <= b){
+                    pixels[i][j] = valorDentroDoIntervalo;
+                }
+                else{
+                    pixels[i][j] = valorForaDoIntervalo;
+                }
+            }
+        }
+
+    }
+
     public void girar90AntiHorario(){
         int newWidth = height;
         int newHeight = width;

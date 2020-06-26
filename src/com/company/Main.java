@@ -8,7 +8,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String nomeArq = "lena.ascii.pgm";
+        String lenaArq = "lena.ascii.pgm";
+        String nomeArq = "new_arq1.txt";
 
 //        try {
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -28,8 +29,9 @@ public class Main {
         PGM pgmOriginal = new PGM(nomeArq);
         PGM pgm = new PGM(pgmOriginal);
 
+        pgm.fatiamento(1, 3, 100, 0);
         pgm.girar90Horario();
-        pgm.save("90horario_"+nomeArq);
+        pgm.save("fatiamento_"+nomeArq);
 
     }
 }
