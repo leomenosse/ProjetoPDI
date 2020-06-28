@@ -79,6 +79,22 @@ public class PPM {
         }
     }
 
+    public PPM(PPM original){
+        this.fileType = original.getFileType();
+        this.width = original.getWidth();
+        this.height = original.getHeight();
+        this.maxValue = original.getMaxValue();
+        this.pixels = new int[height][width][3];
+
+        for (int i = 0; i < pixels.length; i++) {
+            for (int j = 0; j < pixels[i].length; j++) {
+                for (int k = 0; k < 3; k++) {
+                    pixels[i][j][k] = original.getPixel(i, j, k);
+                }
+            }
+        }
+    }
+
     /*
     Salva o arquivo PPM com o nome especificado no parâmetro
     É necessário passar a extensão. Ex: arq.ppm
@@ -142,4 +158,49 @@ public class PPM {
         }
     }
 
+    // GETTERS E SETTERS
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public int[][][] getPixels() {
+        return pixels;
+    }
+
+    public int getPixel(int i, int j, int k){
+        return pixels[i][j][k];
+    }
+
+    public void setPixels(int[][][] pixels) {
+        this.pixels = pixels;
+    }
 }
