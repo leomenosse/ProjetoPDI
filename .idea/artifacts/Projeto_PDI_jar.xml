@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Projeto PDI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Projeto_PDI_jar</output-path>
+    <root id="archive" name="Projeto PDI.jar">
+      <element id="module-output" name="Projeto PDI" />
+    </root>
+  </artifact>
+</component>
