@@ -217,6 +217,57 @@ public class PGM{
     }
 
     /*
+    Aplica uma equalização do histograma da imagem
+     */
+    public void equalizarHistograma(){
+        int L = maxValue + 1;
+        float[] probabilidades = new float[L];
+        int[] qtdPixels = new int[L]; //armazena a quantidade de pixels. qtdPixels[10] armazena quantos pixels com valor 10 existe
+        int[] pixelsResultantes = new int[L];
+
+        //inicializando vetor
+        for (int i = 0; i < L; i++) {
+            qtdPixels[i] = 0;
+        }
+
+        //contagem dos pixels
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int valorPixel = pixels[i][j];
+                qtdPixels[valorPixel]++;
+            }
+        }
+
+        //cálculo das probabilidades
+        for (int i = 0; i < probabilidades.length; i++) {
+            probabilidades[i] = ((float) qtdPixels[i]) / (width * height);
+        }
+
+        //cálculo do novo valor
+        for (int i = 0; i < pixelsResultantes.length; i++) {
+            float somaProbabilidades = 0; //soma das probabilidades de 0 até a posição i
+            for (int j = 0; j <= i; j++) {
+                somaProbabilidades += probabilidades[j];
+            }
+            pixelsResultantes[i] = (int) (maxValue * somaProbabilidades);
+        }
+
+        alterarPixelsAposEqualizacao(pixelsResultantes);
+    }
+
+    /*
+    Atribui novos valores aos pixels depois de ocorrer a equalização do histograma
+     */
+    public void alterarPixelsAposEqualizacao(int[] newPixels){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int valorPixel = pixels[i][j];
+                pixels[i][j] = newPixels[valorPixel];
+            }
+        }
+    }
+
+    /*
     Salva o arquivo PGM com o nome especificado no parâmetro
     É necessário passar a extensão. Ex: arq.pgm
      */

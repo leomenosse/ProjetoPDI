@@ -88,7 +88,8 @@ public class Menu {
                             "6. Fatiamento\n" +
                             "7. Transformação gama\n" +
                             "8. Flip horizontal\n" +
-                            "9. Salvar\n\n" +
+                            "9. Equalizar histograma\n" +
+                            "10. Salvar\n\n" +
                             "Digite uma opção: ";
 
         int opcao;
@@ -160,6 +161,10 @@ public class Menu {
                         break;
 
                     case 9:
+                        pgm.equalizarHistograma();
+                        break;
+
+                    case 10:
                         novoNome = JOptionPane.showInputDialog(null, "Digite o nome (com extensão) do arquivo a ser salvo",
                                 "Salvar", JOptionPane.INFORMATION_MESSAGE);
                         pgm.save(novoNome);
