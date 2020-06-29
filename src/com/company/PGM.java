@@ -33,19 +33,16 @@ public class PGM{
         Path filePath = Paths.get(nomeArquivo);
         Scanner scanner = new Scanner(filePath);
 
-        fileType = scanner.next();
-        width = scanner.nextInt();
-        height = scanner.nextInt();
-        maxValue = scanner.nextInt();
+        fileType = Util.readFileType(scanner);
+        width = Util.readNextInt(scanner);
+        height = Util.readNextInt(scanner);
+        maxValue = Util.readNextInt(scanner);
         pixels = new int[height][width];
 
         ArrayList<Integer> values = new ArrayList<>();
 
         while (scanner.hasNext()) {
-            if (scanner.hasNextInt())
-                values.add(scanner.nextInt());
-            else
-                scanner.next();
+            values.add(Util.readNextInt(scanner));
         }
 
         int count = 0;
@@ -226,7 +223,7 @@ public class PGM{
     public void save(String nomeArq) throws IOException {
         BufferedWriter buffer = new BufferedWriter(new FileWriter((nomeArq)));
 
-        buffer.append("P2" + "\n").append(String.valueOf(width)).append(" ").append(String.valueOf(height)).append("\n").append(String.valueOf(maxValue)).append("\n");
+        buffer.append(fileType + "\n").append(String.valueOf(width)).append(" ").append(String.valueOf(height)).append("\n").append(String.valueOf(maxValue)).append("\n");
         for(int i = 0; i < pixels.length; i++){
             for(int j = 0; j < pixels[i].length; j++){
                 buffer.append(String.valueOf(pixels[i][j])).append(" ");
