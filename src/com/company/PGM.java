@@ -267,6 +267,71 @@ public class PGM{
         }
     }
 
+    public void filtroLaplaciano(int[][] filtro, int c){
+
+        int [][] imagemFiltrada = new int[height][width];
+
+        int heightFiltro = filtro.length;
+        int widthFiltro = filtro[0].length;
+        int limHeight = heightFiltro / 2;
+        int limWidth = widthFiltro / 2;
+
+        //copiando a imagem original para a filtrada
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                imagemFiltrada[i][j] = pixels[i][j];
+            }
+        }
+
+        //aplicando nos pixels onde o filtro não ultrapassa a borda
+        for (int i = limHeight; i < height - limHeight; i++) {
+            for (int j = limWidth; j < width - limWidth; j++) {
+                aplicarFiltroNoPixel(i, j, filtro, imagemFiltrada);
+            }
+        }
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int novoValor = pixels[i][j] + (c * imagemFiltrada[i][j]);
+                if(novoValor > maxValue) imagemFiltrada[i][j] = maxValue;
+                else if(novoValor < 0) imagemFiltrada[i][j] = 0;
+                else imagemFiltrada[i][j] = novoValor;
+            }
+        }
+
+        setPixels(imagemFiltrada);
+
+    }
+
+    /*
+    Aplica o filtro no pixel indicado por parâmetro. As contas são feitas utilizando a matriz
+    original pois ela nunca é alterada. O resultado é salvo na matriz imagemFiltrada. Devemos
+    passar apenas pixels onde o filtro não extrapole as bordas da imagem
+     */
+    public void aplicarFiltroNoPixel(int i, int j, int[][] filtro, int[][] imagemFiltrada){
+        int heightFiltro = filtro.length;
+        int widthFiltro = filtro[0].length;
+        int limHeight = heightFiltro / 2;
+        int limWidth = widthFiltro / 2;
+
+        int soma = 0;
+        int cont = 0;
+        int[] arrayFiltro = Util.matrixToArray(filtro);
+        if(arrayFiltro == null) return;
+
+
+        for (int k = i - limHeight; k <= i + limHeight; k++) {
+            for (int l = j - limWidth; l <= j + limWidth; l++) {
+                soma += pixels[k][l] * arrayFiltro[cont];
+                cont++;
+            }
+        }
+
+        if(soma < 0) imagemFiltrada[i][j] = 0;
+        else if(soma > maxValue) imagemFiltrada[i][j] = maxValue;
+        else imagemFiltrada[i][j] = soma;
+    }
+
     /*
     Salva o arquivo PGM com o nome especificado no parâmetro
     É necessário passar a extensão. Ex: arq.pgm
