@@ -43,4 +43,24 @@ public class Util {
         return fileType;
     }
 
+    /*
+    Transforma uma matriz de inteiros em um array
+     */
+    public static int[] matrixToArray(int[][] matrix){
+        if(matrix.length == 0) return null;
+        if(matrix[0].length == 0) return null;
+
+        int[] array = new int[matrix.length * matrix[0].length];
+        int k = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                array[k] = matrix[i][j];
+                k++;
+            }
+        }
+
+        return array;
+    }
+
 }
