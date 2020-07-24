@@ -267,14 +267,15 @@ public class PGM{
         }
     }
 
+    /*
+    Aplica um filtro laplaciano passado por parâmetro junto com a constante c.
+    Substitui os pixels da classe pelos novos valores depois do filtro
+     */
     public void filtroLaplaciano(int[][] filtro, int c){
 
         int [][] imagemFiltrada = new int[height][width];
-
-        int heightFiltro = filtro.length;
-        int widthFiltro = filtro[0].length;
-        int limHeight = heightFiltro / 2;
-        int limWidth = widthFiltro / 2;
+        int limHeight = filtro.length / 2;
+        int limWidth = filtro[0].length / 2;
 
         //copiando a imagem original para a filtrada
         for (int i = 0; i < height; i++) {
@@ -290,6 +291,7 @@ public class PGM{
             }
         }
 
+        //gerando novos valores com o filtro
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int novoValor = pixels[i][j] + (c * imagemFiltrada[i][j]);
