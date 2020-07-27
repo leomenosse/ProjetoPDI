@@ -270,6 +270,7 @@ public class PGM{
     /*
     Aplica um filtro laplaciano passado por parâmetro e retorna a imagem
     filtrada (não somada com a original).
+    A função não altera os pixels da classe PGM, apenas retorna uma matriz com os novos valores
      */
     public int[][] filtroLaplaciano(int[][] filtro){
 
@@ -287,7 +288,7 @@ public class PGM{
         //aplicando nos pixels onde o filtro não ultrapassa a borda
         for (int i = limHeight; i < height - limHeight; i++) {
             for (int j = limWidth; j < width - limWidth; j++) {
-                aplicarFiltroNoPixel(i, j, filtro, imagemFiltrada);
+                aplicarFiltroLaplacianoNoPixel(i, j, filtro, imagemFiltrada);
             }
         }
 
@@ -312,11 +313,11 @@ public class PGM{
     }
 
     /*
-    Aplica o filtro no pixel indicado por parâmetro. As contas são feitas utilizando a matriz
+    Aplica o filtro no pixel indicado por parâmetro. As operações são feitas utilizando a matriz
     original pois ela nunca é alterada. O resultado é salvo na matriz imagemFiltrada. Devemos
     passar apenas pixels onde o filtro não extrapole as bordas da imagem
      */
-    public void aplicarFiltroNoPixel(int i, int j, int[][] filtro, int[][] imagemFiltrada){
+    public void aplicarFiltroLaplacianoNoPixel(int i, int j, int[][] filtro, int[][] imagemFiltrada){
         int heightFiltro = filtro.length;
         int widthFiltro = filtro[0].length;
         int limHeight = heightFiltro / 2;
@@ -338,6 +339,65 @@ public class PGM{
         if(soma < 0) imagemFiltrada[i][j] = 0;
         else if(soma > maxValue) imagemFiltrada[i][j] = maxValue;
         else imagemFiltrada[i][j] = soma;
+    }
+
+    /*
+    Aplica o filtro da média em todos os pixels que não ultrapassam a borda.
+    A função não altera os pixels da classe PGM, apenas retorna uma matriz com os novos valores
+     */
+    public int[][] filtroMedia(int alturaFiltro, int larguraFiltro){
+
+        int[][] imagemFiltrada = new int[height][width];
+        int limHeight = alturaFiltro / 2;
+        int limWidth = larguraFiltro / 2;
+
+        //copiando a imagem original para a filtrada
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                imagemFiltrada[i][j] = pixels[i][j];
+            }
+        }
+
+        //aplicando nos pixels onde o filtro não ultrapassa a borda
+        for (int i = limHeight; i < height - limHeight; i++) {
+            for (int j = limWidth; j < width - limWidth; j++) {
+                aplicarFiltroMediaNoPixel(i, j, alturaFiltro, larguraFiltro, imagemFiltrada);
+            }
+        }
+
+        return imagemFiltrada;
+
+    }
+
+    /*
+    Aplica o filtro no pixel indicado por parâmetro. As operações são feitas utilizando a matriz
+    original pois ela nunca é alterada. O resultado é salvo na matriz imagemFiltrada. Devemos
+    passar apenas pixels onde o filtro não extrapole as bordas da imagem
+     */
+    public void aplicarFiltroMediaNoPixel(int i, int j, int alturaFiltro, int larguraFiltro, int[][] imagemFiltrada){
+        int limHeight = alturaFiltro / 2;
+        int limWidth = larguraFiltro / 2;
+
+        int soma = 0;
+
+        for (int k = i - limHeight; k <= i + limHeight; k++) {
+            for (int l = j - limWidth; l <= j + limWidth; l++) {
+                soma += pixels[k][l];
+            }
+        }
+
+        soma /= (alturaFiltro * larguraFiltro);
+
+        if(soma < 0) imagemFiltrada[i][j] = 0;
+        else if(soma > maxValue) imagemFiltrada[i][j] = maxValue;
+        else imagemFiltrada[i][j] = soma;
+    }
+
+    /*
+    Substitui os pixels originais pelos novos valores filtrados
+     */
+    public void alterarPixelsAposFiltragemMedia(int[][] imagemFiltrada){
+        setPixels(imagemFiltrada);
     }
 
     /*
