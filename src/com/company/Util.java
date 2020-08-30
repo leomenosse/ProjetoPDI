@@ -84,4 +84,12 @@ public class Util {
         return instrucoes;
     }
 
+    /*
+    Retorna a extensão de um arquivo (contém o '.' no começo)
+     */
+    public static String getExtension(String nomeArq){
+        int index = nomeArq.lastIndexOf('.');
+        return nomeArq.substring(index);
+    }
+
 }
