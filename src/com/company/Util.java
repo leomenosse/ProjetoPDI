@@ -1,5 +1,10 @@
 package com.company;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Util {
@@ -61,6 +66,22 @@ public class Util {
         }
 
         return array;
+    }
+
+    public static List lerInstrucoesDoArquivo(String nomeArquivo) throws IOException {
+        List<String> instrucoes = new ArrayList<>();
+        Path filePath = Paths.get(nomeArquivo);
+        Scanner scanner = new Scanner(filePath);
+
+        while(scanner.hasNextLine()){
+            instrucoes.add(scanner.nextLine());
+        }
+
+        for(String s: instrucoes){
+            System.out.println(s);
+        }
+
+        return instrucoes;
     }
 
 }
