@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class PGM{
@@ -90,6 +92,39 @@ public class PGM{
                 int novoValor = pixels[i][j] + intensidade;
 
                 if(novoValor > maxValue) pixels[i][j] = maxValue;
+                else pixels[i][j] = novoValor;
+            }
+        }
+    }
+
+    public void multiplicar(float intensidade){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                int novoValor = (int) (pixels[i][j] * intensidade);
+
+                if(novoValor > maxValue) pixels[i][j] = maxValue;
+                else pixels[i][j] = novoValor;
+            }
+        }
+    }
+
+    public void somar(PGM pgm){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                int novoValor = pixels[i][j] + pgm.getPixel(i, j);
+
+                if(novoValor > maxValue) pixels[i][j] = maxValue;
+                else pixels[i][j] = novoValor;
+            }
+        }
+    }
+
+    public void subtrair(PGM pgm){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                int novoValor = pixels[i][j] - pgm.getPixel(i, j);
+
+                if(novoValor < 0) pixels[i][j] = 0;
                 else pixels[i][j] = novoValor;
             }
         }
@@ -345,7 +380,7 @@ public class PGM{
     Aplica o filtro da média em todos os pixels que não ultrapassam a borda.
     A função não altera os pixels da classe PGM, apenas retorna uma matriz com os novos valores
      */
-    public int[][] filtroMedia(int alturaFiltro, int larguraFiltro){
+    public void filtroMedia(int alturaFiltro, int larguraFiltro){
 
         int[][] imagemFiltrada = new int[height][width];
         int limHeight = alturaFiltro / 2;
@@ -365,7 +400,7 @@ public class PGM{
             }
         }
 
-        return imagemFiltrada;
+        this.setPixels(imagemFiltrada);
 
     }
 
@@ -393,11 +428,43 @@ public class PGM{
         else imagemFiltrada[i][j] = soma;
     }
 
-    /*
-    Substitui os pixels originais pelos novos valores filtrados
-     */
-    public void alterarPixelsAposFiltragemMedia(int[][] imagemFiltrada){
-        setPixels(imagemFiltrada);
+    public void filtroMediana(int alturaFiltro, int larguraFiltro){
+        int[][] imagemFiltrada = new int[height][width];
+        int limHeight = alturaFiltro / 2;
+        int limWidth = larguraFiltro / 2;
+
+        //copiando a imagem original para a filtrada
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                imagemFiltrada[i][j] = pixels[i][j];
+            }
+        }
+
+        //aplicando nos pixels onde o filtro não ultrapassa a borda
+        for (int i = limHeight; i < height - limHeight; i++) {
+            for (int j = limWidth; j < width - limWidth; j++) {
+                aplicarFiltroMedianaNoPixel(i, j, alturaFiltro, larguraFiltro, imagemFiltrada);
+            }
+        }
+
+        this.setPixels(imagemFiltrada);
+    }
+
+    public void aplicarFiltroMedianaNoPixel(int i, int j, int alturaFiltro, int larguraFiltro, int[][] imagemFiltrada){
+        int limHeight = alturaFiltro / 2;
+        int limWidth = larguraFiltro / 2;
+        ArrayList<Integer> valores = new ArrayList<>();
+
+
+        for (int k = i - limHeight; k <= i + limHeight; k++) {
+            for (int l = j - limWidth; l <= j + limWidth; l++) {
+                valores.add(pixels[k][l]);
+            }
+        }
+
+        Collections.sort(valores);
+
+        imagemFiltrada[i][j] = valores.get(valores.size() / 2); //mediana
     }
 
     /*

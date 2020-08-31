@@ -68,17 +68,13 @@ public class Util {
         return array;
     }
 
-    public static List lerInstrucoesDoArquivo(String nomeArquivo) throws IOException {
+    public static List<String> lerInstrucoesDoArquivo(String nomeArquivo) throws IOException {
         List<String> instrucoes = new ArrayList<>();
         Path filePath = Paths.get(nomeArquivo);
         Scanner scanner = new Scanner(filePath);
 
         while(scanner.hasNextLine()){
             instrucoes.add(scanner.nextLine());
-        }
-
-        for(String s: instrucoes){
-            System.out.println(s);
         }
 
         return instrucoes;
@@ -89,7 +85,6 @@ public class Util {
      */
     public static String getExtension(String nomeArq){
         int index = nomeArq.lastIndexOf('.');
-        return nomeArq.substring(index);
+        return nomeArq.substring(index+1);
     }
-
 }

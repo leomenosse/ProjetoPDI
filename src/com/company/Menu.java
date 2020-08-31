@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -240,7 +241,8 @@ public class Menu {
                     novoNome = JOptionPane.showInputDialog(null, "Digite um nome (com extensão) para salvar os arquivos.\n" +
                                                             "Exemplo: \"teste.txt\" resultará em red_teste.txt, green_teste.txt e blue_text.txt\n\n",
                             "Salvar canais de cor separadamente", JOptionPane.INFORMATION_MESSAGE);
-                    ppm.saveRGB(novoNome);
+//                    ppm.saveRGB(novoNome);
+                    //TODO salvar RGB com tres nomes de arquivo
                     break;
 
                 default:
@@ -255,21 +257,10 @@ public class Menu {
     }
 
     /*
-    Retorna a extensão de um arquivo (contém o '.' no começo)
-     */
-    public static String getExtension(String nomeArq){
-
-        int index = nomeArq.lastIndexOf('.');
-//        String nomeSemExtensao = nomeArq.substring(0, index);
-
-        return nomeArq.substring(index);
-
-    }
-
-    /*
     Retorna a primeira linha do arquivo
     É utilizado para verificar seu tipo(P1, P2, ...)
      */
+    //TODO substituir o uso desse método pelo readFileType da classe Util
     public static String getFileType(String nomeArq) throws IOException {
 
         Path filePath = Paths.get(nomeArq);
@@ -278,5 +269,6 @@ public class Menu {
         return scanner.next();
 
     }
+
 
 }

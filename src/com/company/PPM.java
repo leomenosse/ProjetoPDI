@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class PPM {
@@ -113,11 +114,10 @@ public class PPM {
     }
 
     /*
-    Salva 3 arquivos PGM, um para cada canal de cor (R, G, B)
-    Não é necessário passar a extensão
-    Ex: imagem -> imagem_r.pgm, imagem_g.pgm e imagem_b.pgm
+    Retorna uma lista com 3 arquivos PGM, um para cada canal de cor (R, G, B), respectivamente
      */
-    public void saveRGB(String nomeArq) throws IOException {
+    public List<PGM> splitRGB() {
+        List<PGM> channels = new ArrayList<>();
         int[][] red_channel = new int[height][width];
         int[][] green_channel = new int[height][width];
         int[][] blue_channel = new int[height][width];
@@ -134,9 +134,10 @@ public class PPM {
         PGM green_pgm = new PGM("P2", width, height, maxValue, green_channel);
         PGM blue_pgm = new PGM("P2", width, height, maxValue, blue_channel);
 
-        red_pgm.save(nomeArq+"_r.pgm");
-        green_pgm.save(nomeArq+"_g.pgm");
-        blue_pgm.save(nomeArq+"_b.pgm");
+        channels.add(red_pgm);
+        channels.add(green_pgm);
+        channels.add(blue_pgm);
+        return channels;
     }
 
     /*
@@ -211,6 +212,111 @@ public class PPM {
         i_pgm.save(nomeArq+"_i.pgm");
 
     }
+
+    public void clarear(int intensidade){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                for (int k = 0; k < 3; k++) {
+                    int novoValor = pixels[i][j][k] + intensidade;
+
+                    if(novoValor > maxValue) pixels[i][j][k] = maxValue;
+                    else pixels[i][j][k] = novoValor;
+                }
+            }
+        }
+    }
+
+    public void multiplicar(float intensidade){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                for (int k = 0; k < 3; k++) {
+                    int novoValor = (int) (pixels[i][j][k] * intensidade);
+
+                    if(novoValor > maxValue) pixels[i][j][k] = maxValue;
+                    else pixels[i][j][k] = novoValor;
+                }
+            }
+        }
+    }
+
+    public void subtrair(PPM ppm){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                for (int k = 0; k < 3; k++) {
+                    int novoValor = pixels[i][j][k] - ppm.getPixel(i, j, k);
+
+                    if(novoValor < 0) pixels[i][j][k] = 0;
+                    else pixels[i][j][k] = novoValor;
+                }
+            }
+        }
+    }
+
+    public void somar(PPM ppm){
+        for(int i = 0; i < pixels.length; i++){
+            for(int j = 0; j < pixels[i].length; j++){
+                for (int k = 0; k < 3; k++) {
+                    int novoValor = pixels[i][j][k] + ppm.getPixel(i, j, k);
+
+                    if(novoValor > maxValue) pixels[i][j][k] = maxValue;
+                    else pixels[i][j][k] = novoValor;
+                }
+            }
+        }
+    }
+
+    /*
+    Aplica o fatiamento de níveis de intensidade, alterando somente os pixels cuja intensidade está no intervalo [a, b]
+     */
+    public void fatiamento(int a, int b, int novoValor){
+
+        //verificação que determina se o novo valor está dentro do intervalo permitido
+        if(novoValor > this.maxValue) novoValor = maxValue;
+        else if(novoValor < 0) novoValor = 0;
+
+        for(int i = 0; i < pixels.length; i++){ //height
+            for(int j = 0; j < pixels[i].length; j++){ //width
+                for (int k = 0; k < 3; k++) {
+                    if(pixels[i][j][k] >= a && pixels[i][j][k] <= b){
+                        pixels[i][j][k] = novoValor;
+                    }
+                }
+            }
+        }
+
+    }
+
+    /*
+    Aplica o fatiamento de níveis de intensidade, alterando todos os pixels.
+    Aqueles que estão dentro do intervalo [a,b] recebem valorDentroDoIntervalo
+    Os que estão fora do intervalo recebem valorForaDoIntervalo
+     */
+    public void fatiamento(int a, int b, int valorDentroDoIntervalo, int valorForaDoIntervalo){
+
+        //verificação que determina se o novo valor está dentro do intervalo permitido
+        if(valorDentroDoIntervalo > this.maxValue) valorDentroDoIntervalo = maxValue;
+        else if(valorDentroDoIntervalo < 0) valorDentroDoIntervalo = 0;
+
+        if(valorForaDoIntervalo > this.maxValue) valorForaDoIntervalo= maxValue;
+        else if(valorForaDoIntervalo < 0) valorForaDoIntervalo = 0;
+
+        for(int i = 0; i < pixels.length; i++){ //height
+            for(int j = 0; j < pixels[i].length; j++){ //width
+                for (int k = 0; k < 3; k++) {
+
+                    if(pixels[i][j][k] >= a && pixels[i][j][k] <= b){
+                        pixels[i][j][k] = valorDentroDoIntervalo;
+                    }
+                    else{
+                        pixels[i][j][k] = valorForaDoIntervalo;
+                    }
+                }
+            }
+        }
+
+    }
+
+
 
     public void showInfo(){
         System.out.println("FileType: " + fileType);
